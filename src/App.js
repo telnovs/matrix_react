@@ -1,15 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import  Table from './Components/Table/Table';
-
+import React from "react";
+import "./App.css";
+import MatrixList from "./Components/MatrixList";
+import BakingJournal from "./Components/BakingJournal";
 
 function App() {
-  return (
-    <div className="App">
-      <Table/>
-    </div>
-  );
+   return (
+      <div className="App container">
+         <div className="row">
+            <div className="col-3">
+               <MatrixList />
+            </div>
+            <div className="col-9">
+               <BakingJournal />
+            </div>
+         </div>
+      </div>
+   );
 }
 
 export default App;
