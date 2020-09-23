@@ -3,8 +3,7 @@ import { getMatrices, getLastSuccessBaking } from "../utils/backend";
 import { matrixFullName, secondsToTime } from "../utils/helpers";
 
 const MatrixList = () => {
-   const [timerMinutes, setTimerMinutes] = useState("00");
-   const [timerSeconds, setTimerSeconds] = useState("00");
+   const [timer, setTimer] = useState(secondsToTime(0));
 
    const [matrixList, setMatrixList] = useState([]);
 
@@ -16,21 +15,24 @@ const MatrixList = () => {
       getMatrices(listOfMatricesArrived);
    }, []);
 
-   const minutesOnInput = (event) => {
-      setTimerMinutes(event.target.value);
-   }
-
-   const secondsOnChange = (event) => {
-      setTimerSeconds(event.target.value);
+   const timerOnInput = (event, type) => {
+      switch (type) {
+         case "минуты":
+            setTimer(secondsToTime(parseInt(event.target.value) * 60 + timer.seconds));
+            break;
+         case "секунды":
+            setTimer(secondsToTime(timer.minutes * 60 + parseInt(event.target.value)));
+            break;
+         default:
+            break;
+      }
    }
 
    const lastSuccessBakingArrived = (lastSuccessBaking) => {
       if (lastSuccessBaking.length === 0) {
          return;
       }
-      const tempTime = secondsToTime(lastSuccessBaking[0].value[0].durationInSeconds);
-      setTimerMinutes(`${tempTime.minutes}`);
-      setTimerSeconds(`${tempTime.seconds}`);
+      setTimer(secondsToTime(lastSuccessBaking[0].value[0].durationInSeconds));
    }
 
    const selectOnChange = (event) => {
@@ -51,28 +53,24 @@ const MatrixList = () => {
                <div className="input-group mb-3">
                   <input
                      type="number"
-                     min={0}
-                     max={20}
                      className="form-control"
                      placeholder="мин"
-                     onInput={(e) => {minutesOnInput(e)}}
-                     value={timerMinutes}
+                     onInput={(e) => {timerOnInput(e, "минуты")}}
+                     defaultValue={timer.minutes}
                   />
                   <div className="input-group-append">
                      <span className="input-group-text" id="basic-addon2">:</span>
                   </div>
                   <input
                      type="number"
-                     min={0}
-                     max={59}
                      className="form-control"
                      placeholder="сек"
-                     onChange={(e) => {secondsOnChange(e)}}
-                     value={timerSeconds}
+                     onChange={(e) => {timerOnInput(e, "секунды")}}
+                     defaultValue={timer.seconds}
                   />
                   <button type="button" className="btn btn-danger">Запуск!</button>
                </div>
-               <div className="display-1">{timerMinutes.toString().padStart(2, "0")}:{timerSeconds.toString().padStart(2, "0")}</div>
+               <div className="display-1">{timer.string}</div>
             </div>
          </form>
       </div>
