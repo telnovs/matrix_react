@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { getMatrices, getLastSuccessBaking } from "../utils/backend";
 import { matrixFullName, secondsToTime } from "../utils/helpers";
+import Timer from "./Timer";
 
 const MatrixList = () => {
-   const [timer, setTimer] = useState(secondsToTime(0));
+   const [timerMinutes, setTimerMinutes] = useState(0);
+   const [timerSeconds, setTimerSeconds] = useState(0);
 
    const [matrixList, setMatrixList] = useState([]);
+
+   const [startFlag, setStartFlag] = useState(false);
 
    const listOfMatricesArrived = (matricesFromBackend) => {
       setMatrixList(matricesFromBackend);
@@ -15,39 +19,45 @@ const MatrixList = () => {
       getMatrices(listOfMatricesArrived);
    }, []);
 
-   const timerOnInput = (event, type) => {
-      switch (type) {
-         case "минуты":
-            setTimer(secondsToTime(parseInt(event.target.value) * 60 + timer.seconds));
-            break;
-         case "секунды":
-            setTimer(secondsToTime(timer.minutes * 60 + parseInt(event.target.value)));
-            break;
-         default:
-            break;
-      }
-   }
+   const minutesOnChange = (event) => setTimerMinutes(parseInt(event.target.value));
+
+   const secondsOnChange = (event) => setTimerSeconds(parseInt(event.target.value));
 
    const lastSuccessBakingArrived = (lastSuccessBaking) => {
       if (lastSuccessBaking.length === 0) {
          return;
       }
-      setTimer(secondsToTime(lastSuccessBaking[0].value[0].durationInSeconds));
-   }
+
+      const tempTime = secondsToTime(lastSuccessBaking[0].value[0].durationInSeconds);
+      setTimerMinutes(tempTime.minutes);
+      setTimerSeconds(tempTime.seconds);
+   };
 
    const selectOnChange = (event) => {
       getLastSuccessBaking(event.target.value, lastSuccessBakingArrived);
-   }
+   };
+
+   const startButtonOnClick = (event) => setStartFlag(true);
 
    return (
       <div>
          <form>
             <div className="form-group">
                <label htmlFor="exampleFormControlSelect1">Список матриц:</label>
-               <select className="form-control" id="exampleFormControlSelect1" onChange={(e) => {selectOnChange(e)}}>
+               <select
+                  className="form-control"
+                  id="exampleFormControlSelect1"
+                  onChange={(e) => {
+                     selectOnChange(e);
+                  }}
+               >
                   {matrixList.map((eachMatrix, index) => {
                      const { id, key } = eachMatrix;
-                     return <option key={id} value={id}>{matrixFullName(key)}</option>;
+                     return (
+                        <option key={id} value={id}>
+                           {matrixFullName(key)}
+                        </option>
+                     );
                   })}
                </select>
                <div className="input-group mb-3">
@@ -55,22 +65,36 @@ const MatrixList = () => {
                      type="number"
                      className="form-control"
                      placeholder="мин"
-                     onInput={(e) => {timerOnInput(e, "минуты")}}
-                     defaultValue={timer.minutes}
+                     onChange={(e) => {
+                        minutesOnChange(e);
+                     }}
+                     value={timerMinutes}
                   />
                   <div className="input-group-append">
-                     <span className="input-group-text" id="basic-addon2">:</span>
+                     <span className="input-group-text" id="basic-addon2">
+                        :
+                     </span>
                   </div>
                   <input
                      type="number"
                      className="form-control"
                      placeholder="сек"
-                     onChange={(e) => {timerOnInput(e, "секунды")}}
-                     defaultValue={timer.seconds}
+                     onChange={(e) => {
+                        secondsOnChange(e);
+                     }}
+                     value={timerSeconds}
                   />
-                  <button type="button" className="btn btn-danger">Запуск!</button>
+                  <button
+                     type="button"
+                     className="btn btn-danger"
+                     onClick={(e) => {
+                        startButtonOnClick(e);
+                     }}
+                  >
+                     Запуск!
+                  </button>
                </div>
-               <div className="display-1">{timer.string}</div>
+               <Timer seconds={timerMinutes * 60 + timerSeconds} start={startFlag}/>
             </div>
          </form>
       </div>
