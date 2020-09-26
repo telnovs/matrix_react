@@ -21,8 +21,8 @@ const getBakingJournal = (callbackFunction) => {
    getFromAPI(`${apiURL}/_design/bakingJournal/_view/bakingJournal?include_docs=true&inclusive_end=false&start_key="${startDate}"&end_key="${endDate}"`, callbackFunction);
 } 
 
-const getLastSuccessBaking = (matrix_id, callbackFunction) => {
-   getFromAPI(`${apiURL}/_design/bakingJournal/_view/lastSuccessBaking?inclusive_end=true&start_key=["${matrix_id}", {}]&end_key=["${matrix_id}"]&limit=1&descending=true`, callbackFunction);
+const getLastSuccessBaking = (matrixID, callbackFunction) => {
+   getFromAPI(`${apiURL}/_design/bakingJournal/_view/lastSuccessBaking?inclusive_end=true&start_key=["${matrixID}", {}]&end_key=["${matrixID}"]&limit=1&descending=true`, callbackFunction);
 }
 
 export { getMatrices, getBakingJournal, getLastSuccessBaking };

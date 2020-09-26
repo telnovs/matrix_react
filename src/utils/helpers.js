@@ -2,7 +2,7 @@ const matrixFullName = (matrix) =>
    `${matrix.matrix_name}(${matrix.matrix_size})-${matrix.matrix_number}`;
 
 const secondsToTime = (secondsToConvert) => {
-   const allSeconds = parseInt(secondsToConvert);
+   const allSeconds = parseInt(secondsToConvert, 10);
    const tempMinutes = Math.floor((allSeconds % 3600) / 60);
    const tempSeconds = Math.floor(allSeconds % 60);
    return {

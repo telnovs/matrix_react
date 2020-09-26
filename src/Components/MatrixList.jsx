@@ -19,9 +19,9 @@ const MatrixList = () => {
       getMatrices(listOfMatricesArrived);
    }, []);
 
-   const minutesOnChange = (event) => setTimerMinutes(parseInt(event.target.value));
+   const minutesOnChange = (event) => setTimerMinutes(parseInt(event.target.value, 10));
 
-   const secondsOnChange = (event) => setTimerSeconds(parseInt(event.target.value));
+   const secondsOnChange = (event) => setTimerSeconds(parseInt(event.target.value, 10));
 
    const lastSuccessBakingArrived = (lastSuccessBaking) => {
       if (lastSuccessBaking.length === 0) {
@@ -37,21 +37,21 @@ const MatrixList = () => {
       getLastSuccessBaking(event.target.value, lastSuccessBakingArrived);
    };
 
-   const startButtonOnClick = (event) => setStartFlag(true);
+   const startButtonOnClick = () => setStartFlag(true);
 
    return (
       <div>
          <form>
             <div className="form-group">
-               <label htmlFor="exampleFormControlSelect1">Список матриц:</label>
+               <label htmlFor="matrixListSelect">Список матриц:</label>
                <select
                   className="form-control"
-                  id="exampleFormControlSelect1"
+                  id="matrixListSelect"
                   onChange={(e) => {
                      selectOnChange(e);
                   }}
                >
-                  {matrixList.map((eachMatrix, index) => {
+                  {matrixList.map((eachMatrix) => {
                      const { id, key } = eachMatrix;
                      return (
                         <option key={id} value={id}>
@@ -87,14 +87,14 @@ const MatrixList = () => {
                   <button
                      type="button"
                      className="btn btn-danger"
-                     onClick={(e) => {
-                        startButtonOnClick(e);
+                     onClick={() => {
+                        startButtonOnClick();
                      }}
                   >
                      Запуск!
                   </button>
                </div>
-               <Timer seconds={timerMinutes * 60 + timerSeconds} start={startFlag}/>
+               <Timer timerSeconds={timerMinutes * 60 + timerSeconds} startFlag={startFlag}/>
             </div>
          </form>
       </div>

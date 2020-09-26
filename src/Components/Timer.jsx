@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from "react";
+import usePreciseTimer from "./usePreciseTimer";
 import { secondsToTime } from "../utils/helpers";
 
 const Timer = (props) => {
-   let startFlag = props.start;
-   let timerSeconds = props.seconds;
+   let { startFlag } = props;
+   const { timerSeconds } = props;
 
    const [timer, setTimer] = useState(0);
 
-   useEffect(() => {
-      if (startFlag) {
-         const intervalID = setInterval(() => {
-            setTimer(prevTimer => prevTimer - 1);
-         }, 1000);
+   const timerTikTak = (delay) => {
+      if (timer > 0) {
+         setTimer(timer - delay);
+         console.log("тик-так... ", delay);
       }
-   }, [startFlag]);
+      startFlag = false;
+   };
 
    useEffect(() => {
       setTimer(timerSeconds);
-   }, [timerSeconds]);
+   }, [timerSeconds, startFlag]);
 
-   return <div className="display-1">{`${secondsToTime(timer).string}`}</div>;
+   usePreciseTimer(timerTikTak, 1000, startFlag);
+
+   return <div className="display-1">{`${secondsToTime(Math.ceil(timer)).string}`}</div>;
 };
 
 export default Timer;
