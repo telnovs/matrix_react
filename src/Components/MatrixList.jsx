@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-onchange */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
 import React, { useState, useEffect } from "react";
 import { getMatrices, getLastSuccessBaking } from "../utils/backend";
 import { matrixFullName } from "../utils/helpers";
@@ -7,6 +10,8 @@ const MatrixList = () => {
    const [matrixList, setMatrixList] = useState([]);
 
    const [timerSeconds, setTimerSeconds] = useState(0);
+
+   const [selectedMatrix, setSelectedMatrix] = useState({});
 
    const listOfMatricesArrived = (matricesFromBackend) => {
       setMatrixList(matricesFromBackend);
@@ -22,7 +27,15 @@ const MatrixList = () => {
       }
    };
 
+   const matrixByID = (matrixID) => {
+      const matrix = matrixList.find((item) => item.id === matrixID);
+      // eslint-disable-next-line no-underscore-dangle
+      matrix.key._id = matrixID;
+      return matrix.key;
+   };
+
    const selectOnChange = (event) => {
+      setSelectedMatrix(matrixByID(event.target.value));
       getLastSuccessBaking(event.target.value, lastSuccessBakingArrived);
    };
 
@@ -48,7 +61,7 @@ const MatrixList = () => {
                   })}
                </select>
             </div>
-            <Timer timerSeconds={timerSeconds} />
+            <Timer timerSeconds={timerSeconds} matrix={selectedMatrix} />
          </form>
       </div>
    );

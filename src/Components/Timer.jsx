@@ -1,18 +1,23 @@
 import React, { useEffect, useState, useRef } from "react";
 import { secondsToTime } from "../utils/helpers";
+import { addNewBaking } from "../utils/backend";
 
 const Timer = (props) => {
    const [timer, setTimer] = useState(0);
    const [startFlag, setStartFlag] = useState(false);
-   const { timerSeconds } = props;
+   const { timerSeconds, matrix } = props;
 
    const timerTikTak = useRef(null);
    const intervalObject = useRef(null);
    const startTime = useRef(null);
 
-   const addNewBaking = () => {
-      console.log("Новая выпечка!!");
-   }
+   const bakingSeconds = useRef(null);
+
+   const soundClick = () => {
+      const audio = new Audio(); // Создаём новый элемент Audio
+      audio.src = 'dolgij-svistok-sudi.mp3'; // Указываем путь к звуку "клика"
+      audio.autoplay = true; // Автоматически запускаем
+    }
 
    timerTikTak.current = (delay) => {
       const tempTimer = timer - delay;
@@ -20,24 +25,19 @@ const Timer = (props) => {
       if (tempTimer <= 0) {
          setStartFlag(false);
          clearInterval(intervalObject.current);
-         addNewBaking();
+         soundClick();
+         addNewBaking(matrix, bakingSeconds.current);
       }
       setTimer(tempTimer);
-      console.log("тик-так... ", delay);
-
-      console.log("таймер: ", tempTimer);
    };
 
    useEffect(() => {
-      console.log("ставим время таймера: ", timerSeconds);
       setTimer(timerSeconds);
    }, [timerSeconds]);
 
    // eslint-disable-next-line consistent-return
    useEffect(() => {
-      console.log("хук таймера...");
       if (startFlag) {
-         console.log("Запуск займера...");
          startTime.current = Date.now();
          intervalObject.current = setInterval(() => {
             const currentTime = Date.now();
@@ -47,8 +47,8 @@ const Timer = (props) => {
          }, 1000);
 
          return () => {
-            clearInterval(intervalObject.current);            
-         }
+            clearInterval(intervalObject.current);
+         };
       }
    }, [startFlag]);
 
@@ -102,6 +102,7 @@ const Timer = (props) => {
             className="btn btn-danger btn-lg btn-block"
             onClick={() => {
                setStartFlag(true);
+               bakingSeconds.current = timer;
             }}
          >
             Запуск
