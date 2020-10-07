@@ -41,8 +41,8 @@
    ],
    "rules": {
       "react/prop-types": "off",
-      "lodash/prefer-lodash-method": [1, { "ignoreMethods": ["map", "padStart"] }]
-      /* "linebreak-style": ["error", "windows"],
+      "lodash/prefer-lodash-method": [1, { "ignoreMethods": ["map", "padStart", "find"] }]
+      "linebreak-style": ["error", "windows"],
       "no-mixed-spaces-and-tabs": "error",
       "indent": ["error", 3],
       "react/jsx-indent": [
@@ -52,7 +52,7 @@
       ],
       "react/jsx-indent-props": [2, 3],
       "quotes": ["error", "double"],
-      "implicit-arrow-linebreak": ["error", "below"] */
+      "implicit-arrow-linebreak": ["error", "below"]
    },
    "settings": {
       "import/extensions": [".js", ".jsx"]

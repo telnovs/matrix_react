@@ -32,6 +32,14 @@ const getLastSuccessBaking = (matrixID, callbackFunction) => {
 };
 
 const addNewBaking = async (matrix, bakingSeconds) => {
+   // eslint-disable-next-line no-underscore-dangle
+   const response1 = await fetch(`${apiURL}/${matrix._id}`);
+   if (!response1.ok) {
+      console.log("Абзац...", response1);
+   }
+
+   console.log(await response1.json());
+
    const response = await fetch(apiURL, {
       method: "post",
       headers: { "Content-type": "application/json" },
@@ -50,4 +58,8 @@ const addNewBaking = async (matrix, bakingSeconds) => {
    console.log(result);
 };
 
-export { getMatrices, getBakingJournal, getLastSuccessBaking, addNewBaking };
+const setBakingSuccess = async (bakingID, success) => {
+   console.log(`${bakingID} ${success}`);
+};
+
+export { getMatrices, getBakingJournal, getLastSuccessBaking, addNewBaking, setBakingSuccess };

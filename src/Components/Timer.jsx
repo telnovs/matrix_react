@@ -99,7 +99,7 @@ const Timer = (props) => {
          <div className="display-1 text-center">{`${secondsToTime(Math.ceil(timer)).string}`}</div>
          <button
             type="button"
-            className="btn btn-danger btn-lg btn-block"
+            className="btn btn-primary btn-lg btn-block"
             onClick={() => {
                setStartFlag(true);
                bakingSeconds.current = timer;
