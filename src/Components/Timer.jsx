@@ -26,7 +26,7 @@ const Timer = (props) => {
          setStartFlag(false);
          clearInterval(intervalObject.current);
          soundClick();
-         addNewBaking(matrix, bakingSeconds.current);
+         addNewBaking(matrix, "21:00", bakingSeconds.current);
       }
       setTimer(tempTimer);
    };

@@ -14,4 +14,12 @@ const secondsToTime = (secondsToConvert) => {
    };
 };
 
-export { matrixFullName, secondsToTime };
+function base64Encode(str) {
+   var base64js = require("base64-js");
+   var TextEncoderLite = require("text-encoder-lite").TextEncoderLite;
+
+   var bytes = new TextEncoderLite().encode(str);
+   return base64js.fromByteArray(bytes);
+}
+
+export { matrixFullName, secondsToTime, base64Encode };
